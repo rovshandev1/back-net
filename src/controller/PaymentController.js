@@ -1,4 +1,5 @@
-const stripe = require("stripe")("Stripe-API-klyuchi");
+const { secretKey } = require("../config/stripe");
+const stripe = require("stripe")(secretKey);
 
 const Payment = require("../models/Payment");
 

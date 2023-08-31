@@ -15,7 +15,7 @@ const productSchema = mongoose.Schema(
       required: true,
     },
     price: {
-      type: Number,
+      type: String,
       required: true,
     },
     discount: {
@@ -27,19 +27,9 @@ const productSchema = mongoose.Schema(
       default: 0,
     },
     likes: {
-      type: Number,
-      default: 0,
-    },
-    features: [
-      {
-        name: String,
-        value: String,
-      },
-    ],
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
+      ref: "User",
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
     },
     brand: {
       type: String,
@@ -49,9 +39,7 @@ const productSchema = mongoose.Schema(
       default: false,
     },
   },
-  {
-    suppressReservedKeysWarning: true,
-  }
+  { suppressReservedKeysWarning: true }
 );
 
 productSchema.virtual("id").get(function () {
@@ -62,4 +50,6 @@ productSchema.set("toJSON", {
   virtuals: true,
 });
 
-exports.Product = mongoose.model("Product", productSchema);
+const product = mongoose.model("Product", productSchema);
+
+module.exports = product;

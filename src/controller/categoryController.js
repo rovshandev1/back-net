@@ -1,9 +1,8 @@
 const Category = require("../models/category");
-const subCategory = require("../models/subCategory");
 
 exports.createCategory = async (req, res) => {
   try {
-    const { name   } = req.body;
+    const { name } = req.body;
 
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
@@ -21,11 +20,10 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-
 exports.updateCategory = async (req, res) => {
   try {
     const id = req.params.id.trim();
-    // Kategoriyani topish
+
     const category = await Category.findById(id);
     if (!category) {
       return res.status(404).json({ error: "Category not found" });
@@ -39,12 +37,10 @@ exports.updateCategory = async (req, res) => {
     // Iterate through the request body and only update allowed fields
     for (const field of allowedFields) {
       if (req.body[field] !== undefined) {
-        // Maydonlarni yangilash
         updatedFields[field] = req.body[field];
       }
     }
 
-    // Kategoriyani yangilash
     for (const field in updatedFields) {
       category[field] = updatedFields[field];
     }
@@ -75,7 +71,9 @@ exports.deleteCategory = async (req, res) => {
 
 exports.getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find().populate([{path : "subcategories" , select : "name -_id"}]);
+    const categories = await Category.find().populate([
+      { path: "subcategories", select: "name -_id" },
+    ]);
     res.json(categories);
   } catch (error) {
     res.status(500).json({ error: "Server error" });
@@ -85,7 +83,9 @@ exports.getAllCategories = async (req, res) => {
 exports.getSingleCategory = async (req, res) => {
   try {
     const id = req.params.id;
-    const category = await Category.findById(id).populate([{path : "subcategories" , select : "name"}]);
+    const category = await Category.findById(id).populate([
+      { path: "subcategories", select: "name" },
+    ]);
     console.log(category);
     if (!category) {
       return res.status(404).json({ error: "Category not found" });

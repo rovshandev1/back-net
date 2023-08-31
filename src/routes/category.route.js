@@ -6,8 +6,6 @@ const Category = require("../controller/categoryController");
 
 router.post("/", authenticateUser, isAdmin, Category.createCategory);
 
-
-
 router.put("/:id", authenticateUser, isAdmin, Category.updateCategory);
 
 router.delete("/:id", authenticateUser, isAdmin, Category.deleteCategory);

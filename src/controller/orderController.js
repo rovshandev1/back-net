@@ -1,4 +1,5 @@
 const Order = require("../models/Order");
+const orderItem = require("../models/Order-item");
 const OrderItem = require("../models/Order-item");
 
 // Get all orders
@@ -21,7 +22,7 @@ exports.singleOrder = async (req, res) => {
       .populate("user", "name")
       .populate({
         path: "orderItems",
-        populate: { path: "product", populate: "category" },
+        populate: { path: "product" },
       });
 
     if (!order) {
@@ -30,11 +31,12 @@ exports.singleOrder = async (req, res) => {
       res.status(200).json(order);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false, error: "Server error" });
   }
 };
 
-// Create a new order
+// Create a order
 exports.newOrder = async (req, res) => {
   try {
     const orderItemsIds = await Promise.all(
@@ -60,17 +62,13 @@ exports.newOrder = async (req, res) => {
         return totalPrice;
       })
     );
-
+    console.log(totalPrices);
     const totalPrice = totalPrices.reduce((a, b) => a + b, 0);
 
     let order = new Order({
       orderItems: orderItemsIds,
-      shippingAddress1: req.body.shippingAddress1,
-      shippingAddress2: req.body.shippingAddress2,
+      shippingAddress: req.body.shippingAddress,
       city: req.body.city,
-      zip: req.body.zip,
-      country: req.body.country,
-      phone: req.body.phone,
       status: req.body.status,
       totalPrice: totalPrice,
       user: req.body.user,
@@ -79,17 +77,20 @@ exports.newOrder = async (req, res) => {
     order = await order.save();
 
     if (!order) {
-      res.status(400).json({ success: false, message: "Order creation failed" });
+      res
+        .status(400)
+        .json({ success: false, message: "Order creation failed" });
     } else {
       res.status(201).json(order);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false, error: "Server error" });
   }
-}
+};
 
 // Update an order's status by ID
-exports.updateOrder =  async (req, res) => {
+exports.updateOrder = async (req, res) => {
   try {
     const order = await Order.findByIdAndUpdate(
       req.params.id,
@@ -105,7 +106,7 @@ exports.updateOrder =  async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: "Server error" });
   }
-}
+};
 
 // Delete an order by ID
 exports.deleteOrder = async (req, res) => {
@@ -125,7 +126,7 @@ exports.deleteOrder = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: "Server error" });
   }
-}
+};
 
 // Get total sales
 exports.totalSales = async (req, res) => {
@@ -140,9 +141,10 @@ exports.totalSales = async (req, res) => {
       res.status(200).json({ totalsales: totalSales[0].totalsales });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false, error: "Server error" });
   }
-}
+};
 
 // Get order count
 exports.orderCount = async (req, res) => {
@@ -153,24 +155,26 @@ exports.orderCount = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: "Server error" });
   }
-}
+};
 
 // Get orders for a specific user
 exports.userOrders = async (req, res) => {
   try {
-    const userOrderList = await Order.find({ user: req.params.userid })
+    const userOrderList = await Order.find({ user: req.params.userId })
       .populate({
         path: "orderItems",
-        populate: { path: "product", populate: "category" },
+        populate: { path: "Product", populate: "Subcategory" },
       })
       .sort({ dateOrdered: -1 });
 
     if (userOrderList.length === 0) {
-      res.status(404).json({ success: false, message: "User orders not found" });
+      res
+        .status(404)
+        .json({ success: false, message: "User orders not found" });
     } else {
       res.status(200).json(userOrderList);
     }
   } catch (error) {
     res.status(500).json({ success: false, error: "Server error" });
   }
-}
+};

@@ -9,7 +9,7 @@ const orderSchema = mongoose.Schema(
         required: true,
       },
     ],
-    shippingAddress1: {
+    shippingAddress: {
       type: String,
       required: true,
     },
@@ -23,7 +23,7 @@ const orderSchema = mongoose.Schema(
       default: "Pending",
     },
     totalPrice: {
-      type: Number,
+      type: String,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -43,4 +43,6 @@ orderSchema.set("toJSON", {
   virtuals: true,
 });
 
-exports.Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.model("Order", orderSchema);
+
+module.exports = Order;

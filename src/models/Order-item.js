@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const orderItemSchema = mongoose.Schema({
   quantity: {
-    type: Number,
+    type: String,
     required: true,
   },
   product: {
@@ -11,4 +11,6 @@ const orderItemSchema = mongoose.Schema({
   },
 });
 
-exports.OrderItem = mongoose.model("OrderItem", orderItemSchema);
+const orderItem = mongoose.model("OrderItem", orderItemSchema);
+
+module.exports = orderItem;
