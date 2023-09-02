@@ -83,9 +83,7 @@ exports.deleteProfile = async (req, res) => {
 // Profilni olish funktsiyasi
 exports.getProfile = async (req, res) => {
   try {
-    const userId = req.params.userId;
-
-    const profile = await Profile.findOne({ user: userId });
+    const profile = await Profile.find({});
 
     if (!profile) {
       return res.status(404).json({ message: "Profil topilmadi" });

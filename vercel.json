@@ -1,15 +1,17 @@
 {
   "version": 2,
+  "framework": "node",
+  "name": "sello",
   "builds": [
     {
-      "src": "./app.js",
+      "src": "./src/app.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/"
+      "use": "/src/app.js"
     }
   ]
 }
