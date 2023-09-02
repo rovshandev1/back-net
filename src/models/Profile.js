@@ -1,38 +1,26 @@
 const mongoose = require("mongoose");
 
-const profileSchema = new mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Reference to the User model
-      unique: true,
-    },
-    username: {
-      type: String,
-      required: true,
-    },
-    phone: {
-      type: String,
-      required: true,
-    },
-    bio: {
-      type: String,
-      maxLength: 250,
-    },
-    profileImage: {
-      type: String,
-    },
-    gender: {
-      type: String,
-      default: "other",
-    },
+const profileSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  {
-    timestamps: true,
-  }
-);
-
-profileSchema.index({ user: 1 }, { unique: true });
+  bio: {
+    type: String,
+  },
+  profileImage: {
+    type: String,
+  },
+  username: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
+});
 
 const Profile = mongoose.model("Profile", profileSchema);
 

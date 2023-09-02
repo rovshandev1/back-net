@@ -2,8 +2,7 @@ const Profile = require("../models/Profile");
 
 exports.createProfile = async (req, res) => {
   try {
-    const { bio, website } = req.body;
-    const file = req.file;
+    const { bio } = req.body;
 
     // console.log(req.user);
     const { userId } = req.user;
@@ -13,10 +12,8 @@ exports.createProfile = async (req, res) => {
       return res.status(403).json("profile already exists");
     }
     const profile = new Profile({
-      user: req.user.userId, // Foydalanuvchi ID sini olish
-      bio,
-      website,
-      profileImage: file.filename, // Base64-kodlangan rasm ma'lumotini string sifatida saqlash
+      profileImage: req.file.filename,
+      ...req.body,
     });
 
     // Profilni saqlash
@@ -34,11 +31,10 @@ exports.updateProfile = async (req, res) => {
   try {
     const { userId } = req.user;
 
-    const { bio, website } = req.body;
+    const { bio } = req.body;
     const file = req?.file;
     const updatedProfile = {
       bio,
-      website,
     };
 
     if (file) {
@@ -83,13 +79,8 @@ exports.deleteProfile = async (req, res) => {
 // Profilni olish funktsiyasi
 exports.getProfile = async (req, res) => {
   try {
-    const profile = await Profile.find({});
-
-    if (!profile) {
-      return res.status(404).json({ message: "Profil topilmadi" });
-    }
-
-    res.json(profile);
+    const profiles = await Profile.find({});
+    res.status(200).json(profiles);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });

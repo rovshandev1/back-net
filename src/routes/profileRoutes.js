@@ -12,10 +12,10 @@ router.post(
   profileController.createProfile
 );
 
-router.get("/:userId", authenticateUser, profileController.getProfile);
-
 router.put("/", authenticateUser,  upload .single('profileImage') , profileController.updateProfile);
 
 router.delete("/", authenticateUser, profileController.deleteProfile);
+
+router.get("/", authenticateUser, profileController.getProfile);
 
 module.exports = router;
