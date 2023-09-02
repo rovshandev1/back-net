@@ -11,8 +11,6 @@ const product = require("./routes/productsRoutes");
 const order = require("./routes/order.route");
 const payment = require("./routes/paymentRoute");
 const connectDB = require("./config/database");
-const swaggerUi = require("swagger-ui-express");
-const specs = require("./swaggerCon");
 
 const app = express();
 
@@ -36,15 +34,6 @@ app.use("/sello/product", product);
 app.use("/sello/order", order);
 app.use("/sello/payment", payment); // Corrected route path
 
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(specs, {
-    explorer: true,
-    customCssUrl:
-      "https://cdn.jsdelivr.net/npm/swagger-ui-themes@3.0.0/themes/3.x/theme-newspaper.css",
-  })
-);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
