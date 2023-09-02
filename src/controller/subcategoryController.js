@@ -1,5 +1,5 @@
-const Category = require("../models/category");
-const subCategory = require("../models/subCategory");
+const { Category } = require("../models/category");
+const { subCategory } = require("../models/subCategory");
 
 // Create a subcategory
 exports.createSubCategory = async (req, res) => {
@@ -15,12 +15,7 @@ exports.createSubCategory = async (req, res) => {
       name,
     });
 
-    console.log(result);
-
-    console.log(Category);
-
     const exist = await Category.findById(categoryId);
-    console.log(exist);
 
     exist.subcategories.push(result._id);
     exist.save();
