@@ -32,3 +32,22 @@ exports.processPayment = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+exports.getAllPayments = async (req, res) => {
+  try {
+    const payments = await Payment.find();
+    res.status(200).json(payments);
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+
+exports.getPaymentHistory = async (req, res) => {
+  const userId = req.user.userId; // Foydalanuvchi identifikatori
+  try {
+    const paymentHistory = await Payment.find({ user: userId });
+    res.status(200).json(paymentHistory);
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Server error" });
+  }
+};

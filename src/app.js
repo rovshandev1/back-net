@@ -12,7 +12,7 @@ const order = require("./routes/order.route");
 const payment = require("./routes/paymentRoute");
 const connectDB = require("./config/database");
 const swaggerUi = require("swagger-ui-express");
-const swaggerSpec = require("./swagger");
+const specs = require("./swaggerCon");
 
 const app = express();
 
@@ -24,21 +24,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("src/uploads"));
 app.use(express.static("public"));
 
-// Yo'nalishlarni ulash
-app.use("/sello", authRoute);
-app.use("/sello/category", categories);
-app.use("/sello/product", product);
-app.use("/sello/profile", profile);
-app.use("/sello/order", order);
-app.use("/sello", payment);
-app.use("/sello/subcategory/", subcategories);
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// app.use("/sello/brand/", brand);
-
-
+// Connect to the database
 connectDB();
+
+// Define your routes
+app.use("/sello", authRoute);
+app.use("/sello/profile", profile);
+app.use("/sello/category", categories);
+app.use("/sello/subcategory", subcategories); // Removed trailing slash
+app.use("/sello/product", product);
+app.use("/sello/order", order);
+app.use("/sello/payment", payment); // Corrected route path
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, {
+    explorer: true,
+    customCssUrl:
+      "https://cdn.jsdelivr.net/npm/swagger-ui-themes@3.0.0/themes/3.x/theme-newspaper.css",
+  })
+);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

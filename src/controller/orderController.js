@@ -119,7 +119,7 @@ exports.deleteOrder = async (req, res) => {
           await OrderItem.findByIdAndRemove(orderItem);
         })
       );
-      res.status(200).json({ success: true, message: "Order deleted" });
+      res.status(200).json({ success: true, message: "Order deleted successfully" });
     } else {
       res.status(404).json({ success: false, message: "Order not found" });
     }
@@ -163,7 +163,7 @@ exports.userOrders = async (req, res) => {
     const userOrderList = await Order.find({ user: req.params.userId })
       .populate({
         path: "orderItems",
-        populate: { path: "Product", populate: "Subcategory" },
+        populate: { path: "product" },
       })
       .sort({ dateOrdered: -1 });
 

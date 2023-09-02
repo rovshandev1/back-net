@@ -24,7 +24,7 @@ const paymentSchema = mongoose.Schema(
       required: true,
     },
     status: {
-      type: String, // To'lov holati (masalan, "amalga oshirildi")
+      type: String, 
       default: "Pending",
     },
   },
